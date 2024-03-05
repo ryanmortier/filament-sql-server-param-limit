@@ -4,11 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserResource extends Resource
 {
@@ -38,7 +40,17 @@ class UserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('test')
+                        ->label('Test')
+                        ->form([
+                            Forms\Components\Select::make('collection')
+                                ->label('Collection')
+                                ->options(['A', 'B', 'C'])
+                                ->required(),
+                        ])
+                        ->action(function (array $data, Collection $accounts) {
+                            dd($data, $accounts);
+                        }),
                 ]),
             ]);
     }
